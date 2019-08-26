@@ -1,0 +1,14 @@
+smaller error when using subset of nodes.
+perhaps will invert when using larger resevoir.
+
+need to scale the data much better 
+
+config working
+esn = pyESN.ESN(  n_inputs  = train_in.shape[1],
+                  n_outputs = train_out_truth.shape[1],
+                  n_reservoir = 100,
+                  spectral_radius = .9,
+                  noise = .001,
+                  sparsity = .42,
+                  random_state = 42 )
+

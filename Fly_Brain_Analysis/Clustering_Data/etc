@@ -1,0 +1,11 @@
+# separate shapes of clusters
+if False :
+    n_remainder  = cluster_grid.shape[0] % cluster_width 
+    n_pad        = 0 if n_remainder == 0 else cluster_width - n_remainder
+    cluster_grid = np.append( cluster_grid, np.repeat( -1, n_pad ) )
+    cluster_grid = cluster_grid.reshape( -1, cluster_width )
+
+    cluster_grids.append( cluster_grid )
+    cluster_grids.append( np.repeat(-1,cluster_width) )
+
+

@@ -49,11 +49,10 @@ class RNN:
         outputs = []
         for time_idx in range( len(inputs) ):
             node_at_t   = self.nodes[ time_idx ]
-            output      = node_at_t.run(
-                                input_data          =inputs[time_idx], 
-                                global_node_weights =self.node_weights,
-                                weights_in          =self.weights_IN,
-                                weights_out         =self.weights_OUT )
+            output      = node_at_t.run( input_data=inputs[time_idx], 
+                                node_weights=self.node_weights,
+                                weights_in  =self.weights_IN,
+                                weights_out =self.weights_OUT )
             outputs.append( output )
         return outputs
 
@@ -62,10 +61,11 @@ class RNN:
     #@param truth_outputs   : one hot vectors as the truth outputs
     def train ( self, inputs, truth_outputs ):
         #the total cross entropy error over all timesteps
-        total_xent_err = 0
+        total_xent_err  = 0
         #run and collect errors from machine.
         machine_outputs = self.run( inputs )
-        total_dv = np.zeros( self.weights_OUT.shape )
+        total_d_out     = np.zeros( self.weights_OUT.shape )
+        total_d_nodes   = np.zeros( self.node_weights.shape )
         #iterate time steps computing output and err for each then bptt
         for time_idx in range( len(inputs) ):
             machine_output  = machine_outputs[ time_idx ]
@@ -74,15 +74,15 @@ class RNN:
                                 machine_output[0],truth_output)
             curr_err        = Softmax.raw_err(machine_output, truth_output)
             #iterate nodes backwards from this timestep to bptt
-            d_err_out = np.outer(self.nodes[time_idx].hidden_state, curr_err).T
-            total_dv += d_err_out
-            """
-            for node_t in reversed( self.nodes[:time_idx+1] ) : 
-                node_t.back_prop(error               =curr_err, 
-                                 global_node_weights =self.node_weights,
-                                 weights_in          =self.weights_IN,
-                                 weights_out         =self.weights_OUT )
-            """
-        self.weights_OUT -=  total_dv * .001
+            d_nodes, d_out, d_in = self.nodes[ time_idx ].back_prop(
+                                                error       =curr_err,
+                                                node_weights=self.node_weights,
+                                                weights_in  =self.weights_IN,
+                                                weights_out =self.weights_OUT )
+            total_d_nodes   += d_nodes
+            total_d_out     += d_out
+        #apply the weights (step in direction of sgd )
+        #self.weights_OUT -=  total_d_out * .05
+        self.node_weights -=  total_d_nodes * .05
                 
         print("total err was ",total_xent_err)

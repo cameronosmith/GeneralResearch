@@ -38,5 +38,5 @@ class Tanh:
         return np.tanh(x)
 
     #param x : the input to get tanh derivative on
-    def Tanh_derivative( x ):
-        return 1-(Tanh.Tanh(x)**2)
+    def deriv( x ):
+        return 1-(np.tanh(x)**2)

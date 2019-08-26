@@ -22,4 +22,4 @@ input_vec       = [one_hot(idx) for idx in input_indices ]
 output_vec      = [one_hot(idx) for idx in output_indices]
 
 for _ in range(num_training_steps):
-        machine.train( input_vec, output_vec ) 
+    machine.train( input_vec, output_vec ) 
