@@ -9,7 +9,7 @@ from scipy.spatial import distance
 num_brain_cols = 80
 
 #load in our data
-scaled_data = pd.read_csv('../../data/Smaller_Scaled_Fly80XY.csv')
+scaled_data = pd.read_csv('../../data/Scaled_Fly80XY.csv')
 brain_data  = scaled_data.iloc[:,0:num_brain_cols]
 fut_brain   = brain_data.iloc[1:,:]
 move_data   = scaled_data.iloc[:,num_brain_cols:]

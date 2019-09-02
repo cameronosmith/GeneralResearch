@@ -23,7 +23,7 @@ format_neurons( np.arange(80) )
 
 # optional plot of the cluster groupings
 
-if False :
+if True :
 
     cluster_grids = np.vstack( [sorted_indices, [-1,-1]] )
     cluster_grids = cluster_grids[:,1].reshape( -1, 9 )
